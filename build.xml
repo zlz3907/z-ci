@@ -3,34 +3,34 @@
     project description
   </description>
 
-  <import file="build-common.xml" as="common" />
+  <import file="build-common.xml" />
 
-  <target name="${target.prefix}.default" depends="common.init"
+  <target name="ci.default" depends="common.init"
           description="For generating the project's artifact.">
   </target>
 
-  <target name="${target.prefix}.clean" depends="common.cleanall"
+  <target name="ci.clean" depends="common.cleanall"
           description="For cleaning the project." />
 
-  <target name="${target.prefix}.site" depends=""
+  <target name="ci.site" depends=""
           description="For generating the project's documentation." />
 
   <!-- Validate—Validate that the project is correct and all necessary
        information is available.
   -->
-  <target name="${target.prefix}.validate"
+  <target name="ci.validate"
           depends="common.cleanall,common.init,common.resolve"
           description="Validate that the project is correct and available." />
 
-  <target name="${target.prefix}.compile"
-          depends="validate,common.compile"
+  <target name="ci.compile"
+          depends="ci.validate,common.compile"
           description="Compile the source code of the project." />
 
   <!-- Test the compiled source code using a suitable unit-testing framework.
        These tests should not require the code to be packaged or deployed.
   -->
-  <target name="${target.prefix}.test"
-          depends="compile,common.compile-test,common.unit-test"
+  <target name="ci.test"
+          depends="ci.compile,common.compile-test,common.unit-test"
           description="Test the compiled source code." />
 
 
@@ -38,36 +38,36 @@
        Integration test—Process and deploy the package if necessary into an
        environment where integration tests can be run.
   -->
-  <target name="${target.prefix}.package" depends="test,common.package"
+  <target name="ci.package" depends="ci.test,common.package"
           description="Package the compiled code in its distributable format.">
   </target>
 
   <!-- Run any checks to verify that the package is valid and meets quality
        criteria.
   -->
-  <target name="${target.prefix}.verify"
-          depends="package,common.compile-test,common.verify-test"
+  <target name="ci.verify"
+          depends="ci.package,common.compile-test,common.verify-test"
           description="Run any checks to verify.">
   </target>
 
   <!-- Install the package into the local repository for use as a dependency in
        other projects locally.
   -->
-  <target name="${target.prefix}.install" depends="verify,common.install"
+  <target name="ci.install" depends="ci.verify,common.install"
           description="Install the package into the local repository.">
   </target>
 
   <!-- In an integration or release environment, copy the final package to the
        remote repository for sharing with other developers and projects.
   -->
-  <target name="${target.prefix}.deploy" depends="verify,common.deploy"
+  <target name="ci.deploy" depends="ci.verify,common.deploy"
           description="Copy the final package to the remote repository.">
   </target>
 
   <!-- Process and deploy the package if necessary into an environment where
        integration tests can be run.
   -->
-  <target name="${target.prefix}.integration-test" depends="common.integration-test"
+  <target name="ci.integration-test" depends="common.integration-test"
           description="Into an environment where integration tests can be run.">
   </target>
 

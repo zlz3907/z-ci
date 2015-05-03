@@ -1,4 +1,4 @@
-<project name="common-template" default="compile-test" basedir="."
+<project name="common-template" default="common.compile-test" basedir="."
          xmlns:ivy="antlib:org.apache.ivy.ant">
   <!-- xmlns:cs="antlib:com.puppycrawl.tools.checkstyle" -->
   <description>
@@ -84,7 +84,7 @@
        实际调用ivy:retrieve
        该任务用来从资源库中下载ivy.xml文件中指定的所有项目信赖模块
   -->
-  <target name="resolve"
+  <target name="common.resolve"
           description="resolve and retrieve dependencies with ivy">
     <echo>${resolve.shared.settings.file}</echo>
     <echo>env.home: ${env.HOME}</echo>
@@ -94,7 +94,7 @@
                   type="source"/>
   </target>
 
-  <target name="generate-pom" description="Generate Maven pom">
+  <target name="common.generate-pom" description="Generate Maven pom">
     <ivy:makepom ivyfile="${basedir}/ivy.xml"
                  pomfile="${basedir}/module.pom" conf="default,runtime">
       <mapping conf="default" scope="compile"/>
@@ -108,7 +108,7 @@
        实际调用ivy:cleancache
        清理ivy缓存文件
   -->
-  <target name="clean-cache"
+  <target name="common.clean-cache"
           description="resolve and retrieve dependencies with ivy">
     <ivy:cleancache />
   </target>
@@ -116,12 +116,12 @@
   <!-- target: report
        输出依赖解析报告
   -->
-  <target name="report" depends="resolve"
+  <target name="common.report" depends="common.resolve"
           description="generates a report of dependencies">
     <ivy:report todir="${report.ivy.dir}" dot="true" />
   </target>
 
-  <target name="gen-graph" depends="report"
+  <target name="common.gen-graph" depends="common.report"
           description="generates a graph of dependencies">
     <property name="dot.file"
               value="${report.ivy.dir}/apache-depending-default.dot" />
@@ -139,7 +139,7 @@
   -->
   <taskdef resource="checkstyletask.properties"
            classpath="plugins/checkstyle/checkstyle-5.6-all.jar"/>
-  <target name="checkstyle"
+  <target name="common.checkstyle"
           description="Generates a report of code convention violations.">
     <mkdir dir="${checkstyle.report.dir}" />
     <copy file="plugins/checkstyle/checkstyle-simple.xsl"
@@ -161,7 +161,7 @@
   </target>
 
   <!-- project target -->
-  <target name="init">
+  <target name="common.init">
     <!-- Create the time stamp -->
     <tstamp>
       <format property="current.year" pattern="yyyy" />
@@ -207,7 +207,7 @@
   <!-- target: compile
        编译源码
   -->
-  <target name="compile" description="compile the source ">
+  <target name="common.compile" description="compile the source ">
     <echo message="src.dir: ${src.dir}" />
     <!-- Compile the java code from ${src} into ${build} -->
     <javac encoding="${encoding}" target="${target}" source="${source}"
@@ -220,7 +220,7 @@
     </javac>
   </target>
 
-  <target name='compile-test'
+  <target name='common.compile-test'
           description='compile the test source'>
     <echo message="${project.name}: ${ant.file}" />
     <javac encoding="${encoding}" target="${target}" source="${source}"
@@ -237,7 +237,7 @@
   <!-- target: dist
        发布项目到指定目录
   -->
-  <target name="package" description="generate the distribution">
+  <target name="common.package" description="generate the distribution">
     <!-- Create the distribution directory -->
     <mkdir dir="${dist.lib}" />
     <antcall target="_packagejar" />
@@ -273,17 +273,17 @@
   <!-- target: clean
        清除已编译的文件
   -->
-  <target name="buildclean" description="clean up">
+  <target name="common.buildclean" description="clean up">
     <!-- Delete the ${build} and ${dist} directory trees -->
     <delete dir="${build.dir}" />
   </target>
   <!-- target: distclean
        删除已发布的项目jar包
   -->
-  <target name="distclean" description="clean dist">
+  <target name="common.distclean" description="clean dist">
     <delete dir="${dist.dir}" />
   </target>
-  <target name="cleanall" depends="buildclean,distclean"
+  <target name="common.cleanall" depends="common.buildclean,common.distclean"
           description="clean all">
     <antcall target="_cobertura_clean" />
   </target>
@@ -292,39 +292,39 @@
   </target>
 
 
-  <target name="build" depends="build-subprojects,build-project" />
-  <target name="build-subprojects" />
-  <target name="build-project" depends="compile-test" />
+  <target name="common.build" depends="_build-subprojects,_build-project" />
+  <target name="_build-subprojects" />
+  <target name="_build-project" depends="common.compile-test" />
 
   <!-- target: test
        运行junit测试类
   -->
-  <target name="unit-test">
-    <antcall target="coverage">
+  <target name="common.unit-test">
+    <antcall target="common.coverage">
       <param name="test.fileset" value="${test.unit.dir}" />
       <param name="test.classpath" value="classpath" />
     </antcall>
-    <antcall target="junit-test">
+    <antcall target="common.junit-test">
       <param name="test.fileset" value="${test.unit.dir}" />
       <param name="test.classpath" value="classpath" />
     </antcall>
   </target>
 
-  <target name="verify-test">
+  <target name="common.verify-test">
     <antcall target="_run-test">
       <param name="test.fileset" value="${test.verify.dir}" />
       <param name="test.classpath" value="classpath" />
     </antcall>
   </target>
 
-  <target name="integration-test">
+  <target name="common.integration-test">
     <antcall target="_run-test">
       <param name="test.fileset" value="${test.integration.dir}" />
       <param name="test.classpath" value="classpath" />
     </antcall>
   </target>
 
-  <target name="junit-test" unless="isRunCoverage"
+  <target name="common.junit-test" unless="isRunCoverage"
           description="test the project">
     <antcall target="_run-test">
       <param name="test.fileset" value="${test.fileset}" />
@@ -360,7 +360,6 @@
       <classpath>
         <path refid="${test.classpath}" />
       </classpath>
-
     </junit>
   </target>
 
@@ -368,7 +367,7 @@
   <!-- target: test-report
        运行junit测试类，并且生成测试报告
   -->
-  <target name="junit-test-report"
+  <target name="common.junit-test-report"
           description="test project and generate junit report">
     <mkdir dir="${junit.report.html.dir}" />
     <junitreport todir="${junit.report.xml.dir}">
@@ -382,7 +381,7 @@
   <!-- target: coverage
        执行测试代码，并检查测试方法的代码覆盖率。
   -->
-  <target name="coverage" if="isRunCoverage"
+  <target name="common.coverage" if="isRunCoverage"
           description="run coverage test">
     <antcall target="_cobertura_coverage" />
   </target>
@@ -390,7 +389,7 @@
     <antcall target="cobertura.coverage" />
   </target>
 
-  <target name="tar" description="tar files" depends="resolve">
+  <target name="common.tar" description="tar files" depends="common.resolve">
     <echo>${dist.dir}/${ivy.module}-${ivy.revision}.jar</echo>
     <delete file="${dist.dir}/${project.name}-${ivy.revision}.tar" />
     <delete file="${dist.dir}/${project.name}-${ivy.revision}.tar.gz" />
@@ -408,7 +407,7 @@
   <!-- target: publish
        发布项目到发布服务器上
   -->
-  <target name="publish" description="upload jar to ivy server">
+  <target name="common.publish" description="upload jar to ivy server">
     <ivy:publish resolver="${resolver}"
                  organisation="${ivy.organisation}"
                  module="${project.name}"
@@ -422,14 +421,14 @@
   </target>
 
 
-  <target name="install">
-    <antcall target="publish">
+  <target name="common.install">
+    <antcall target="common.publish">
       <param name="resolver" value="local" />
     </antcall>
   </target>
 
-  <target name="deploy">
-    <antcall target="publish">
+  <target name="common.deploy">
+    <antcall target="common.publish">
       <param name="resolver" value="shared" />
     </antcall>
     <copy includeemptydirs="true" todir="${dist.lib}">
@@ -438,7 +437,7 @@
     </copy>
   </target>
 
-  <target name="copy-dependencies">
+  <target name="common.copy-dependencies">
     <copy includeemptydirs="true" todir="${dist.lib}/lib">
       <fileset dir="${lib.dir}">
       </fileset>
