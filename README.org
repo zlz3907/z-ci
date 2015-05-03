@@ -1,0 +1,4 @@
+#+title: z-ciplugins
+#+author: Bliss Chung
+
+一个Java项目构建生命周期管理及持续集成的插件集

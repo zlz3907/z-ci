@@ -1,0 +1,446 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Load Test Results</title>
+<style type="text/css">
+				body {
+					font:normal 68% verdana,arial,helvetica;
+					color:#000000;
+				}
+				table tr td, table tr th {
+					font-size: 68%;
+				}
+				table.details tr th{
+				    color: #ffffff;
+					font-weight: bold;
+					text-align:center;
+					background:#2674a6;
+					white-space: nowrap;
+				}
+				table.details tr td{
+					background:#eeeee0;
+					white-space: nowrap;
+				}
+				h1 {
+					margin: 0px 0px 5px; font: 165% verdana,arial,helvetica
+				}
+				h2 {
+					margin-top: 1em; margin-bottom: 0.5em; font: bold 125% verdana,arial,helvetica
+				}
+				h3 {
+					margin-bottom: 0.5em; font: bold 115% verdana,arial,helvetica
+				}
+				.Failure {
+					font-weight:bold; color:red;
+				}
+				
+	
+				img
+				{
+				  border-width: 0px;
+				}
+				
+				.expand_link
+				{
+				   position=absolute;
+				   right: 0px;
+				   width: 27px;
+				   top: 1px;
+				   height: 27px;
+				}
+				
+				.page_details
+				{
+				   display: none;
+				}
+                                
+                                .page_details_expanded
+                                {
+                                    display: block;
+                                    display/* hide this definition from  IE5/6 */: table-row;
+                                }
+
+
+			</style>
+<script language="JavaScript">
+                           function expand(details_id)
+			   {
+			      
+			      document.getElementById(details_id).className = "page_details_expanded";
+			   }
+			   
+			   function collapse(details_id)
+			   {
+			      
+			      document.getElementById(details_id).className = "page_details";
+			   }
+			   
+			   function change(details_id)
+			   {
+			      if(document.getElementById(details_id+"_image").src.match("expand"))
+			      {
+			         document.getElementById(details_id+"_image").src = "collapse.png";
+			         expand(details_id);
+			      }
+			      else
+			      {
+			         document.getElementById(details_id+"_image").src = "expand.png";
+			         collapse(details_id);
+			      } 
+                           }
+			</script>
+</head>
+<body>
+<h1>Load Test Results</h1>
+<table width="100%">
+<tr>
+<td align="left">Date report: 2013/05/08 15:27</td><td align="right">Designed for use with <a href="http://jmeter.apache.org/">JMeter</a> and <a href="http://ant.apache.org">Ant</a>.</td>
+</tr>
+</table>
+<hr size="1">
+<h2>Summary</h2>
+<table width="95%" cellspacing="2" cellpadding="5" border="0" class="details" align="center">
+<tr valign="top">
+<th># Samples</th><th>Failures</th><th>Success Rate</th><th>Average Time</th><th>Min Time</th><th>Max Time</th>
+</tr>
+<tr valign="top" class="Failure">
+<td align="center">90</td><td align="center">6</td><td align="center">93.33%</td><td align="center">231 ms</td><td align="center">101 ms</td><td align="center">352 ms</td>
+</tr>
+</table>
+<hr align="center" width="95%" size="1">
+<h2>Pages</h2>
+<table width="95%" cellspacing="2" cellpadding="5" border="0" class="details" align="center">
+<tr valign="top">
+<th>URL</th><th># Samples</th><th>Failures</th><th>Success Rate</th><th>Average Time</th><th>Min Time</th><th>Max Time</th><th></th>
+</tr>
+<tr valign="top" class="Failure">
+<td><a href="#Sample 1">Sample 1</a></td><td align="center">45</td><td align="center">6</td><td align="right">86.67%</td><td align="right">231 ms</td><td align="right">101 ms</td><td align="right">352 ms</td><td align="center"><a href="javascript:change('page_details_1')"><img alt="expand/collapse" src="expand.png" id="page_details_1_image"></a></td>
+</tr>
+<tr class="page_details" id="page_details_1">
+<td bgcolor="#FF0000" colspan="8">
+<div align="center">
+<b>Details for Page "Sample 1"</b>
+<table width="95%" cellspacing="1" cellpadding="1" border="0" bgcolor="#2674A6" bordercolor="#000000">
+<tr>
+<th>Thread</th><th>Iteration</th><th>Time (milliseconds)</th><th>Bytes</th><th>Success</th>
+</tr>
+<tr>
+<td>Thread Group 1-1</td><td align="center">1</td><td align="right">200</td><td align="right">12</td><td align="center">true</td>
+</tr>
+<tr>
+<td>Thread Group 1-1</td><td align="center">2</td><td align="right">127</td><td align="right">15</td><td align="center">true</td>
+</tr>
+<tr>
+<td>Thread Group 1-2</td><td align="center">3</td><td align="right">274</td><td align="right">15</td><td align="center">true</td>
+</tr>
+<tr>
+<td>Thread Group 1-3</td><td align="center">4</td><td align="right">352</td><td align="right">15</td><td align="center">false</td>
+</tr>
+<tr>
+<td>Thread Group 1-1</td><td align="center">5</td><td align="right">261</td><td align="right">15</td><td align="center">true</td>
+</tr>
+<tr>
+<td>Thread Group 1-2</td><td align="center">6</td><td align="right">335</td><td align="right">15</td><td align="center">true</td>
+</tr>
+<tr>
+<td>Thread Group 1-3</td><td align="center">7</td><td align="right">134</td><td align="right">15</td><td align="center">true</td>
+</tr>
+<tr>
+<td>Thread Group 1-1</td><td align="center">8</td><td align="right">287</td><td align="right">15</td><td align="center">true</td>
+</tr>
+<tr>
+<td>Thread Group 1-2</td><td align="center">9</td><td align="right">325</td><td align="right">15</td><td align="center">true</td>
+</tr>
+<tr>
+<td>Thread Group 1-3</td><td align="center">10</td><td align="right">289</td><td align="right">15</td><td align="center">true</td>
+</tr>
+<tr>
+<td>Thread Group 1-1</td><td align="center">11</td><td align="right">138</td><td align="right">16</td><td align="center">true</td>
+</tr>
+<tr>
+<td>Thread Group 1-2</td><td align="center">12</td><td align="right">284</td><td align="right">16</td><td align="center">true</td>
+</tr>
+<tr>
+<td>Thread Group 1-3</td><td align="center">13</td><td align="right">144</td><td align="right">16</td><td align="center">true</td>
+</tr>
+<tr>
+<td>Thread Group 1-2</td><td align="center">14</td><td align="right">124</td><td align="right">16</td><td align="center">false</td>
+</tr>
+<tr>
+<td>Thread Group 1-3</td><td align="center">15</td><td align="right">329</td><td align="right">16</td><td align="center">true</td>
+</tr>
+<tr>
+<td>Thread Group 1-1</td><td align="center">16</td><td align="right">289</td><td align="right">12</td><td align="center">true</td>
+</tr>
+<tr>
+<td>Thread Group 1-2</td><td align="center">17</td><td align="right">108</td><td align="right">15</td><td align="center">true</td>
+</tr>
+<tr>
+<td>Thread Group 1-1</td><td align="center">18</td><td align="right">223</td><td align="right">15</td><td align="center">true</td>
+</tr>
+<tr>
+<td>Thread Group 1-2</td><td align="center">19</td><td align="right">182</td><td align="right">15</td><td align="center">false</td>
+</tr>
+<tr>
+<td>Thread Group 1-3</td><td align="center">20</td><td align="right">186</td><td align="right">15</td><td align="center">true</td>
+</tr>
+<tr>
+<td>Thread Group 1-1</td><td align="center">21</td><td align="right">132</td><td align="right">15</td><td align="center">true</td>
+</tr>
+<tr>
+<td>Thread Group 1-2</td><td align="center">22</td><td align="right">223</td><td align="right">15</td><td align="center">true</td>
+</tr>
+<tr>
+<td>Thread Group 1-3</td><td align="center">23</td><td align="right">239</td><td align="right">15</td><td align="center">true</td>
+</tr>
+<tr>
+<td>Thread Group 1-2</td><td align="center">24</td><td align="right">134</td><td align="right">15</td><td align="center">true</td>
+</tr>
+<tr>
+<td>Thread Group 1-1</td><td align="center">25</td><td align="right">278</td><td align="right">15</td><td align="center">true</td>
+</tr>
+<tr>
+<td>Thread Group 1-3</td><td align="center">26</td><td align="right">196</td><td align="right">16</td><td align="center">true</td>
+</tr>
+<tr>
+<td>Thread Group 1-3</td><td align="center">27</td><td align="right">279</td><td align="right">16</td><td align="center">true</td>
+</tr>
+<tr>
+<td>Thread Group 1-2</td><td align="center">28</td><td align="right">284</td><td align="right">16</td><td align="center">true</td>
+</tr>
+<tr>
+<td>Thread Group 1-1</td><td align="center">29</td><td align="right">352</td><td align="right">16</td><td align="center">false</td>
+</tr>
+<tr>
+<td>Thread Group 1-3</td><td align="center">30</td><td align="right">101</td><td align="right">16</td><td align="center">true</td>
+</tr>
+<tr>
+<td>Thread Group 1-1</td><td align="center">31</td><td align="right">349</td><td align="right">12</td><td align="center">true</td>
+</tr>
+<tr>
+<td>Thread Group 1-2</td><td align="center">32</td><td align="right">169</td><td align="right">15</td><td align="center">true</td>
+</tr>
+<tr>
+<td>Thread Group 1-3</td><td align="center">33</td><td align="right">247</td><td align="right">15</td><td align="center">true</td>
+</tr>
+<tr>
+<td>Thread Group 1-1</td><td align="center">34</td><td align="right">249</td><td align="right">15</td><td align="center">false</td>
+</tr>
+<tr>
+<td>Thread Group 1-2</td><td align="center">35</td><td align="right">170</td><td align="right">15</td><td align="center">true</td>
+</tr>
+<tr>
+<td>Thread Group 1-3</td><td align="center">36</td><td align="right">225</td><td align="right">15</td><td align="center">true</td>
+</tr>
+<tr>
+<td>Thread Group 1-1</td><td align="center">37</td><td align="right">237</td><td align="right">15</td><td align="center">true</td>
+</tr>
+<tr>
+<td>Thread Group 1-2</td><td align="center">38</td><td align="right">178</td><td align="right">15</td><td align="center">true</td>
+</tr>
+<tr>
+<td>Thread Group 1-3</td><td align="center">39</td><td align="right">144</td><td align="right">15</td><td align="center">true</td>
+</tr>
+<tr>
+<td>Thread Group 1-1</td><td align="center">40</td><td align="right">194</td><td align="right">15</td><td align="center">true</td>
+</tr>
+<tr>
+<td>Thread Group 1-2</td><td align="center">41</td><td align="right">210</td><td align="right">16</td><td align="center">true</td>
+</tr>
+<tr>
+<td>Thread Group 1-1</td><td align="center">42</td><td align="right">271</td><td align="right">16</td><td align="center">true</td>
+</tr>
+<tr>
+<td>Thread Group 1-3</td><td align="center">43</td><td align="right">325</td><td align="right">16</td><td align="center">true</td>
+</tr>
+<tr>
+<td>Thread Group 1-2</td><td align="center">44</td><td align="right">338</td><td align="right">16</td><td align="center">false</td>
+</tr>
+<tr>
+<td>Thread Group 1-3</td><td align="center">45</td><td align="right">288</td><td align="right">16</td><td align="center">true</td>
+</tr>
+</table>
+</div>
+</td>
+</tr>
+<tr valign="top" class="">
+<td>Sample 2</td><td align="center">45</td><td align="center">0</td><td align="right">100.00%</td><td align="right">230 ms</td><td align="right">105 ms</td><td align="right">344 ms</td><td align="center"><a href="javascript:change('page_details_2')"><img alt="expand/collapse" src="expand.png" id="page_details_2_image"></a></td>
+</tr>
+<tr class="page_details" id="page_details_2">
+<td bgcolor="#FF0000" colspan="8">
+<div align="center">
+<b>Details for Page "Sample 2"</b>
+<table width="95%" cellspacing="1" cellpadding="1" border="0" bgcolor="#2674A6" bordercolor="#000000">
+<tr>
+<th>Thread</th><th>Iteration</th><th>Time (milliseconds)</th><th>Bytes</th><th>Success</th>
+</tr>
+<tr>
+<td>Thread Group 1-1</td><td align="center">1</td><td align="right">190</td><td align="right">17</td><td align="center">true</td>
+</tr>
+<tr>
+<td>Thread Group 1-1</td><td align="center">2</td><td align="right">257</td><td align="right">20</td><td align="center">true</td>
+</tr>
+<tr>
+<td>Thread Group 1-2</td><td align="center">3</td><td align="right">294</td><td align="right">20</td><td align="center">true</td>
+</tr>
+<tr>
+<td>Thread Group 1-3</td><td align="center">4</td><td align="right">195</td><td align="right">20</td><td align="center">true</td>
+</tr>
+<tr>
+<td>Thread Group 1-1</td><td align="center">5</td><td align="right">270</td><td align="right">20</td><td align="center">true</td>
+</tr>
+<tr>
+<td>Thread Group 1-2</td><td align="center">6</td><td align="right">161</td><td align="right">20</td><td align="center">true</td>
+</tr>
+<tr>
+<td>Thread Group 1-3</td><td align="center">7</td><td align="right">271</td><td align="right">20</td><td align="center">true</td>
+</tr>
+<tr>
+<td>Thread Group 1-2</td><td align="center">8</td><td align="right">141</td><td align="right">20</td><td align="center">true</td>
+</tr>
+<tr>
+<td>Thread Group 1-1</td><td align="center">9</td><td align="right">323</td><td align="right">20</td><td align="center">true</td>
+</tr>
+<tr>
+<td>Thread Group 1-3</td><td align="center">10</td><td align="right">326</td><td align="right">20</td><td align="center">true</td>
+</tr>
+<tr>
+<td>Thread Group 1-1</td><td align="center">11</td><td align="right">279</td><td align="right">21</td><td align="center">true</td>
+</tr>
+<tr>
+<td>Thread Group 1-2</td><td align="center">12</td><td align="right">316</td><td align="right">21</td><td align="center">true</td>
+</tr>
+<tr>
+<td>Thread Group 1-3</td><td align="center">13</td><td align="right">291</td><td align="right">21</td><td align="center">true</td>
+</tr>
+<tr>
+<td>Thread Group 1-2</td><td align="center">14</td><td align="right">251</td><td align="right">21</td><td align="center">true</td>
+</tr>
+<tr>
+<td>Thread Group 1-3</td><td align="center">15</td><td align="right">151</td><td align="right">21</td><td align="center">true</td>
+</tr>
+<tr>
+<td>Thread Group 1-1</td><td align="center">16</td><td align="right">111</td><td align="right">17</td><td align="center">true</td>
+</tr>
+<tr>
+<td>Thread Group 1-2</td><td align="center">17</td><td align="right">218</td><td align="right">20</td><td align="center">true</td>
+</tr>
+<tr>
+<td>Thread Group 1-1</td><td align="center">18</td><td align="right">193</td><td align="right">20</td><td align="center">true</td>
+</tr>
+<tr>
+<td>Thread Group 1-2</td><td align="center">19</td><td align="right">111</td><td align="right">20</td><td align="center">true</td>
+</tr>
+<tr>
+<td>Thread Group 1-3</td><td align="center">20</td><td align="right">119</td><td align="right">20</td><td align="center">true</td>
+</tr>
+<tr>
+<td>Thread Group 1-1</td><td align="center">21</td><td align="right">266</td><td align="right">20</td><td align="center">true</td>
+</tr>
+<tr>
+<td>Thread Group 1-2</td><td align="center">22</td><td align="right">193</td><td align="right">20</td><td align="center">true</td>
+</tr>
+<tr>
+<td>Thread Group 1-3</td><td align="center">23</td><td align="right">225</td><td align="right">20</td><td align="center">true</td>
+</tr>
+<tr>
+<td>Thread Group 1-3</td><td align="center">24</td><td align="right">139</td><td align="right">21</td><td align="center">true</td>
+</tr>
+<tr>
+<td>Thread Group 1-2</td><td align="center">25</td><td align="right">269</td><td align="right">20</td><td align="center">true</td>
+</tr>
+<tr>
+<td>Thread Group 1-1</td><td align="center">26</td><td align="right">303</td><td align="right">20</td><td align="center">true</td>
+</tr>
+<tr>
+<td>Thread Group 1-3</td><td align="center">27</td><td align="right">305</td><td align="right">21</td><td align="center">true</td>
+</tr>
+<tr>
+<td>Thread Group 1-2</td><td align="center">28</td><td align="right">314</td><td align="right">21</td><td align="center">true</td>
+</tr>
+<tr>
+<td>Thread Group 1-1</td><td align="center">29</td><td align="right">196</td><td align="right">21</td><td align="center">true</td>
+</tr>
+<tr>
+<td>Thread Group 1-3</td><td align="center">30</td><td align="right">204</td><td align="right">21</td><td align="center">true</td>
+</tr>
+<tr>
+<td>Thread Group 1-1</td><td align="center">31</td><td align="right">251</td><td align="right">17</td><td align="center">true</td>
+</tr>
+<tr>
+<td>Thread Group 1-2</td><td align="center">32</td><td align="right">339</td><td align="right">20</td><td align="center">true</td>
+</tr>
+<tr>
+<td>Thread Group 1-3</td><td align="center">33</td><td align="right">240</td><td align="right">20</td><td align="center">true</td>
+</tr>
+<tr>
+<td>Thread Group 1-1</td><td align="center">34</td><td align="right">246</td><td align="right">20</td><td align="center">true</td>
+</tr>
+<tr>
+<td>Thread Group 1-2</td><td align="center">35</td><td align="right">344</td><td align="right">20</td><td align="center">true</td>
+</tr>
+<tr>
+<td>Thread Group 1-3</td><td align="center">36</td><td align="right">199</td><td align="right">20</td><td align="center">true</td>
+</tr>
+<tr>
+<td>Thread Group 1-1</td><td align="center">37</td><td align="right">223</td><td align="right">20</td><td align="center">true</td>
+</tr>
+<tr>
+<td>Thread Group 1-2</td><td align="center">38</td><td align="right">105</td><td align="right">20</td><td align="center">true</td>
+</tr>
+<tr>
+<td>Thread Group 1-1</td><td align="center">39</td><td align="right">135</td><td align="right">20</td><td align="center">true</td>
+</tr>
+<tr>
+<td>Thread Group 1-3</td><td align="center">40</td><td align="right">290</td><td align="right">20</td><td align="center">true</td>
+</tr>
+<tr>
+<td>Thread Group 1-2</td><td align="center">41</td><td align="right">169</td><td align="right">21</td><td align="center">true</td>
+</tr>
+<tr>
+<td>Thread Group 1-3</td><td align="center">42</td><td align="right">144</td><td align="right">21</td><td align="center">true</td>
+</tr>
+<tr>
+<td>Thread Group 1-1</td><td align="center">43</td><td align="right">289</td><td align="right">21</td><td align="center">true</td>
+</tr>
+<tr>
+<td>Thread Group 1-2</td><td align="center">44</td><td align="right">170</td><td align="right">21</td><td align="center">true</td>
+</tr>
+<tr>
+<td>Thread Group 1-3</td><td align="center">45</td><td align="right">325</td><td align="right">21</td><td align="center">true</td>
+</tr>
+</table>
+</div>
+</td>
+</tr>
+</table>
+<hr align="center" width="95%" size="1">
+<h2>Failure Detail</h2>
+<h3>Sample 1<a name="Sample 1"></a>
+</h3>
+<table width="95%" cellspacing="2" cellpadding="5" border="0" class="details" align="center">
+<tr valign="top">
+<th>Response</th><th>Failure Message</th>
+</tr>
+<tr>
+<td>200 - OK</td><td>Test failed: text expected not to contain /3/</td>
+</tr>
+<tr>
+<td>200 - OK</td><td>Test failed: text expected not to contain /3/</td>
+</tr>
+<tr>
+<td>200 - OK</td><td>Test failed: text expected not to contain /3/</td>
+</tr>
+<tr>
+<td>200 - OK</td><td>Test failed: text expected not to contain /3/</td>
+</tr>
+<tr>
+<td>200 - OK</td><td>Test failed: text expected not to contain /3/</td>
+</tr>
+<tr>
+<td>200 - OK</td><td>Test failed: text expected not to contain /3/</td>
+</tr>
+</table>
+</body>
+</html>

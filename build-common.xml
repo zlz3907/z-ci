@@ -1,0 +1,448 @@
+<project name="common-template" default="compile-test" basedir="."
+         xmlns:ivy="antlib:org.apache.ivy.ant">
+  <!-- xmlns:cs="antlib:com.puppycrawl.tools.checkstyle" -->
+  <description>
+    project description
+  </description>
+
+  <!-- some variables used
+       全局变量
+       包括项目文件目录结构的设置和对系统环境变量的引用。
+  -->
+  <property environment="env" />
+  <property file="${basedir}/plugins/project.properties" />
+
+  <!-- JS Test Frame -->
+  <import file="${js.rhinounit.build.xml}" optional="true" as="rhino" />
+
+  <!-- 测试代码的覆盖率 -->
+  <condition property="cobertura.build.xml"
+             value="Warning: No found cobertura home!">
+    <not>
+      <available file="${cobertura.home}" type="dir"/>
+    </not>
+  </condition>
+  <condition property="cobertura.build.xml" value="cobertura/build.xml">
+    <available file="${cobertura.home}" type="dir" />
+  </condition>
+
+  <import file="${cobertura.build.xml}" optional="true" as="cobertura" />
+  <condition property="isRunCoverage">
+    <matches pattern="cobertura.build.xml" string="${cobertura.build.xml}"/>
+  </condition>
+
+  <!-- 设置项目是否是Web项目 -->
+  <condition property="isWarType" value="false">
+    <matches pattern="war" string="${package.type}" />
+  </condition>
+
+  <!-- 获取ivy共享仓库配置文件地址 -->
+  <condition property="resolve.shared.settings.file"
+             value="${resolve.shared.remote.path}"
+             else="${resolve.shared.local.path}">
+    <and>
+      <equals arg1="${resolve.shared.isremote}" arg2="true" trim="ture"/>
+      <isreachable timeout="2" url="${resolve.shared.remote.path}" />
+    </and>
+  </condition>
+
+  <!--
+  <condition property="isPluginsOfReachable">
+    <and>
+      <istrue value="${plugins.auto.update}" />
+      <isreachable timeout="2" url="${plugins.checksum.url}" />
+    </and>
+  </condition>
+  -->
+
+  <!-- paths used for compilation and run
+       这里配置classpath
+  -->
+  <!--path id="junit-path">
+      <pathelement location="${ECLIPSE_HOME}/plugins/org.junit_4.8.2.v4_8_2_v20110321-1705/junit.jar" />
+      <pathelement location="${ECLIPSE_HOME}/plugins/org.hamcrest.core_1.1.0.v20090501071000.jar" />
+      </path-->
+
+  <path id="lib">
+    <fileset dir="${lib.dir}" includes="*.jar" />
+  </path>
+
+  <path id="classpath">
+    <!--path refid="junit-path" /-->
+    <path refid="lib" />
+    <pathelement location="${build.src.dir}" />
+    <pathelement location="${build.test.dir}" />
+    <pathelement path="${env.CLASSPATH}" />
+  </path>
+
+  <!-- ivy settings -->
+  <!--property name="ivy.cache.dir" value="${basedir}/.cache" /-->
+  <property name="ivy.settings.dir" value="ivy/settings" />
+  <ivy:settings file="${ivy.settings.dir}/ivysettings.xml" />
+
+  <!-- target: resolve
+       实际调用ivy:retrieve
+       该任务用来从资源库中下载ivy.xml文件中指定的所有项目信赖模块
+  -->
+  <target name="resolve"
+          description="resolve and retrieve dependencies with ivy">
+    <echo>${resolve.shared.settings.file}</echo>
+    <echo>env.home: ${env.HOME}</echo>
+    <ivy:retrieve pattern="${lib.dir}/[artifact]-[revision].[ext]"
+                  type="jar,bundle"/>
+    <ivy:retrieve pattern="${env.HOME}/.ivy2/sources/[organisation]/[artifact]-[revision]-sources.[ext]"
+                  type="source"/>
+  </target>
+
+  <target name="generate-pom" description="Generate Maven pom">
+    <ivy:makepom ivyfile="${basedir}/ivy.xml"
+                 pomfile="${basedir}/module.pom" conf="default,runtime">
+      <mapping conf="default" scope="compile"/>
+      <mapping conf="runtime" scope="runtime"/>
+      <dependency group="com.acme" artifact="acme-logging"
+                  version="1.0" optional="true"/>
+    </ivy:makepom>
+  </target>
+
+  <!-- target: clean-cache
+       实际调用ivy:cleancache
+       清理ivy缓存文件
+  -->
+  <target name="clean-cache"
+          description="resolve and retrieve dependencies with ivy">
+    <ivy:cleancache />
+  </target>
+
+  <!-- target: report
+       输出依赖解析报告
+  -->
+  <target name="report" depends="resolve"
+          description="generates a report of dependencies">
+    <ivy:report todir="${report.ivy.dir}" dot="true" />
+  </target>
+
+  <target name="gen-graph" depends="report"
+          description="generates a graph of dependencies">
+    <property name="dot.file"
+              value="${report.ivy.dir}/apache-depending-default.dot" />
+    <property name="ivygraph.output.file" value="${report.ivy.dir}/graph.png" />
+    <exec executable="dot">
+      <arg line="-T png -o ${ivygraph.output.file} ${dot.file}" />
+    </exec>
+  </target>
+
+  <!-- checkstyle
+       代码规范检查，参考sun的java代码规范
+       该任务执行需要在头部导入配置：
+       xmlns:cs="antlib:com.puppycrawl.tools.checkstyle"
+       并且ant运行时的classpath中需要包含checkstyle-5.6-all.jar
+  -->
+  <taskdef resource="checkstyletask.properties"
+           classpath="plugins/checkstyle/checkstyle-5.6-all.jar"/>
+  <target name="checkstyle"
+          description="Generates a report of code convention violations.">
+    <mkdir dir="${checkstyle.report.dir}" />
+    <copy file="plugins/checkstyle/checkstyle-simple.xsl"
+          tofile="${checkstyle.report.xsl.file}"/>
+    <checkstyle maxErrors="2000" config="plugins/checkstyle/sun_checks.xml"
+                classpath="plugins/checkstyle/">
+      <fileset dir="${checkstyle.dir}" includes="${checkstyle.dir.includes}"
+               excludes="${checkstyle.dir.excludes}">
+      </fileset>
+      <!-- Location of cache-file. Something that is project specific -->
+      <!--property key="checkstyle.cache.file" file="target/cachefile"/-->
+      <formatter type="plain"/>
+      <formatter type="xml"
+                 toFile="${checkstyle.report.xml.file}"/>
+    </checkstyle>
+    <style in="${checkstyle.report.xml.file}"
+           out="${checkstyle.report.html.file}"
+           style="${checkstyle.report.xsl.file}"/>
+  </target>
+
+  <!-- project target -->
+  <target name="init">
+    <!-- Create the time stamp -->
+    <tstamp>
+      <format property="current.year" pattern="yyyy" />
+      <format property="DSTAMP" pattern="yyyy-MM-dd" />
+      <format property="TSTAMP" pattern="HH:mm:ss" />
+    </tstamp>
+    <!-- Create the build directory structure used by compile -->
+    <mkdir dir="${build.src.dir}" />
+    <mkdir dir="${build.test.dir}" />
+    <mkdir dir="${dist.dir}" />
+    <mkdir dir="${test.unit.dir}" />
+    <mkdir dir="${test.verify.dir}" />
+    <mkdir dir="${test.integration.dir}" />
+    <mkdir dir="${publish.dir}" />
+    <!-- copy resources -->
+    <copy includeemptydirs="false" todir="${build.src.dir}">
+      <fileset dir="${resource.copy.dir}"
+               includes="${resource.copy.dir.includes}"
+               excludes="${resource.copy.dir.excludes}" >
+      </fileset>
+    </copy>
+    <copy includeemptydirs="false" todir="${build.test.dir}">
+      <fileset dir="${test.unit.dir}">
+        <exclude name="**/*.java"/>
+      </fileset>
+      <fileset dir="${test.verify.dir}">
+        <exclude name="**/*.java"/>
+      </fileset>
+      <fileset dir="${test.integration.dir}">
+        <exclude name="**/*.java"/>
+      </fileset>
+    </copy>
+
+    <echo>Apache Ivy Default User Dir: ${ivy.default.ivy.user.dir}</echo>
+    <echo>Package Type: ${package.type}</echo>
+    <echo>org: ${ivy.organisation} version: ${ivy.revision}</echo>
+    <echo>Import ${cobertura.build.xml}, isRunCoverage is ${isRunCoverage}</echo>
+    <!--antcall target="auto-update-plugins" /-->
+  </target>
+
+
+
+  <!-- target: compile
+       编译源码
+  -->
+  <target name="compile" description="compile the source ">
+    <echo message="src.dir: ${src.dir}" />
+    <!-- Compile the java code from ${src} into ${build} -->
+    <javac encoding="${encoding}" target="${target}" source="${source}"
+           debug="true" debuglevel="${debuglevel}" destdir="${build.src.dir}"
+           includeantruntime="false" srcdir="${src.dir}" fork="yes"
+           includes="${src.dir.includes}">
+      <!--src path="${basedir}" includes="${src.dir}" /-->
+      <exclude name="example/No.java" />
+      <classpath refid="classpath" />
+    </javac>
+  </target>
+
+  <target name='compile-test'
+          description='compile the test source'>
+    <echo message="${project.name}: ${ant.file}" />
+    <javac encoding="${encoding}" target="${target}" source="${source}"
+           debug="true" debuglevel="${debuglevel}"
+           destdir="${build.test.dir}" fork="yes"
+           includeantruntime="false"
+           srcdir="${src.test}" includes="${src.test.includes}">
+      <!--src path="${src.test}" /-->
+      <!--exclude name="" /-->
+      <classpath refid="classpath"/>
+    </javac>
+  </target>
+
+  <!-- target: dist
+       发布项目到指定目录
+  -->
+  <target name="package" description="generate the distribution">
+    <!-- Create the distribution directory -->
+    <mkdir dir="${dist.lib}" />
+    <antcall target="_packagejar" />
+    <antcall target="_packagewar" />
+    <antcall target="_packageminiwar" />
+  </target>
+  <target name="_packagejar">
+    <!-- Put everything in ${build} into the MyProject-${DSTAMP}.jar file -->
+    <jar jarfile="${dist.lib}/${project.name}-${ivy.revision}-jars.jar"
+         basedir="${build.src.dir}" />
+    <jar jarfile="${dist.lib}/${project.name}-${ivy.revision}-sources.jar"
+         basedir="${src.dir}"/>
+  </target>
+  <target name="_packagewar" if="isWarType">
+    <war destfile="${dist.lib}/${ivy.module}-${ivy.revision}.war"
+         webxml="${web.root}/WEB-INF/web.xml">
+      <fileset dir="${web.root}"/>
+      <lib dir="${lib.dir}">
+      </lib>
+      <classes dir="${build.src.dir}"/>
+    </war>
+  </target>
+  <target name="_packageminiwar" if="isWarType">
+    <war destfile="${dist.lib}/${ivy.module}-${ivy.revision}-mini.war"
+         webxml="${web.root}/WEB-INF/web.xml">
+      <fileset dir="${web.root}">
+        <exclude name="**/lib/**" />
+        <exclude name="**/classes/**" />
+      </fileset>
+    </war>
+  </target>
+
+  <!-- target: clean
+       清除已编译的文件
+  -->
+  <target name="buildclean" description="clean up">
+    <!-- Delete the ${build} and ${dist} directory trees -->
+    <delete dir="${build.dir}" />
+  </target>
+  <!-- target: distclean
+       删除已发布的项目jar包
+  -->
+  <target name="distclean" description="clean dist">
+    <delete dir="${dist.dir}" />
+  </target>
+  <target name="cleanall" depends="buildclean,distclean"
+          description="clean all">
+    <antcall target="_cobertura_clean" />
+  </target>
+  <target name="_cobertura_clean" if="isRunCoverage">
+    <antcall target="cobertura.clean" />
+  </target>
+
+
+  <target name="build" depends="build-subprojects,build-project" />
+  <target name="build-subprojects" />
+  <target name="build-project" depends="compile-test" />
+
+  <!-- target: test
+       运行junit测试类
+  -->
+  <target name="unit-test">
+    <antcall target="coverage">
+      <param name="test.fileset" value="${test.unit.dir}" />
+      <param name="test.classpath" value="classpath" />
+    </antcall>
+    <antcall target="junit-test">
+      <param name="test.fileset" value="${test.unit.dir}" />
+      <param name="test.classpath" value="classpath" />
+    </antcall>
+  </target>
+
+  <target name="verify-test">
+    <antcall target="_run-test">
+      <param name="test.fileset" value="${test.verify.dir}" />
+      <param name="test.classpath" value="classpath" />
+    </antcall>
+  </target>
+
+  <target name="integration-test">
+    <antcall target="_run-test">
+      <param name="test.fileset" value="${test.integration.dir}" />
+      <param name="test.classpath" value="classpath" />
+    </antcall>
+  </target>
+
+  <target name="junit-test" unless="isRunCoverage"
+          description="test the project">
+    <antcall target="_run-test">
+      <param name="test.fileset" value="${test.fileset}" />
+      <param name="test.classpath" value="${test.classpath}" />
+    </antcall>
+  </target>
+
+  <condition property="isTestSingleMethod" else="false">
+    <and>
+      <isset property="testcase"/>
+      <isset property="methods"/>
+    </and>
+  </condition>
+
+  <target name="_run-test">
+    <mkdir dir="${junit.report.xml.dir}" />
+    <echo>isTestSingleMethod: ${isTestSingleMethod}</echo>
+    <junit printsummary="${junit.printsummary}" haltonerror="yes"
+           haltonfailure="yes" fork="yes" failureProperty="test.failed">
+      <formatter type="plain" usefile="false" />
+      <formatter type="xml" />
+
+      <test name="${testcase}" todir="${junit.report.xml.dir}"
+            if="testcase" unless="methods"/>
+      <test name="${testcase}" methods="${methods}"
+            todir="${junit.report.xml.dir}" if="methods"/>
+      <batchtest todir="${junit.report.xml.dir}" unless="testcase">
+        <fileset dir="${test.fileset}">
+          <include name="**/Test*.java"/>
+          <include name="**/*Test.java"/>
+        </fileset>
+      </batchtest>
+      <classpath>
+        <path refid="${test.classpath}" />
+      </classpath>
+
+    </junit>
+  </target>
+
+
+  <!-- target: test-report
+       运行junit测试类，并且生成测试报告
+  -->
+  <target name="junit-test-report"
+          description="test project and generate junit report">
+    <mkdir dir="${junit.report.html.dir}" />
+    <junitreport todir="${junit.report.xml.dir}">
+      <fileset dir="${junit.report.xml.dir}">
+        <include name="TEST-*.xml" />
+      </fileset>
+      <report todir="${junit.report.html.dir}" />
+    </junitreport>
+  </target>
+
+  <!-- target: coverage
+       执行测试代码，并检查测试方法的代码覆盖率。
+  -->
+  <target name="coverage" if="isRunCoverage"
+          description="run coverage test">
+    <antcall target="_cobertura_coverage" />
+  </target>
+  <target name="_cobertura_coverage" if="cobertura.build.xml">
+    <antcall target="cobertura.coverage" />
+  </target>
+
+  <target name="tar" description="tar files" depends="resolve">
+    <echo>${dist.dir}/${ivy.module}-${ivy.revision}.jar</echo>
+    <delete file="${dist.dir}/${project.name}-${ivy.revision}.tar" />
+    <delete file="${dist.dir}/${project.name}-${ivy.revision}.tar.gz" />
+    <tar destfile="${dist.dir}/${project.name}-${ivy.revision}.tar">
+      <tarfileset dir="${basedir}" prefix="${project.name}-${ivy.revision}"
+                  preserveLeadingSlashes="true"
+                  includes="${tar.fileset.includes}">
+      </tarfileset>
+    </tar>
+    <gzip destfile="${dist.dir}/${project.name}-${ivy.revision}.tar.gz"
+          src="${dist.dir}/${project.name}-${ivy.revision}.tar"/>
+    <delete file="${dist.dir}/${project.name}-${ivy.revision}.tar" />
+  </target>
+
+  <!-- target: publish
+       发布项目到发布服务器上
+  -->
+  <target name="publish" description="upload jar to ivy server">
+    <ivy:publish resolver="${resolver}"
+                 organisation="${ivy.organisation}"
+                 module="${project.name}"
+                 revision="${ivy.revision}"
+                 pubrevision="${ivy.revision}"
+                 overwrite="true">
+      <artifact name="${project.name}" type="jar" ext="jar"/>
+      <artifact name="${project.name}" type="source" ext="jar"/>
+      <artifacts pattern="${dist.lib}/[artifact]-[revision]-[type]s.[ext]"/>
+    </ivy:publish>
+  </target>
+
+
+  <target name="install">
+    <antcall target="publish">
+      <param name="resolver" value="local" />
+    </antcall>
+  </target>
+
+  <target name="deploy">
+    <antcall target="publish">
+      <param name="resolver" value="shared" />
+    </antcall>
+    <copy includeemptydirs="true" todir="${dist.lib}">
+      <fileset dir="${publish.dir}">
+      </fileset>
+    </copy>
+  </target>
+
+  <target name="copy-dependencies">
+    <copy includeemptydirs="true" todir="${dist.lib}/lib">
+      <fileset dir="${lib.dir}">
+      </fileset>
+    </copy>
+  </target>
+
+</project>

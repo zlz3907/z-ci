@@ -1,0 +1,5 @@
+#!/bin/bash
+path=`pwd`
+
+export CLASSPATH=${path}/plugins/ant2ide.jar
+ant -listener net.gleamynode.ant2ide.EclipseProjectGenerator "$@"

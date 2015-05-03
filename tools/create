@@ -1,0 +1,59 @@
+#!/bin/bash
+help='create <project_name> [-t <package_type>]'
+
+project_name='my_app'
+package_type='jar'
+download_filename='jpt-plugins'
+download_file_ext='tar.gz'
+download_prefix_v=''
+download_file_ver=''
+download_base_url='http://192.168.7.244:8080/job/Jcm-Project-Template/lastSuccessfulBuild/artifact/dist/'
+git_server="https://github.com/zlz3907/z-ciplugins.git"
+download_file=$download_filename$download_prefix_v$download_file_ver.$download_file_ext
+## check input args
+parseArgs() {
+    case $# in
+        3) # specified project name and package type
+            if [ $2 = '-t' ]; then package_type=$3; fi
+            if [ $3 != 'jar' -a $3 != 'war' ]; then package_type='jar'; fi
+            project_name=$1;;
+        1) # specified project name
+            project_name=$1;;
+        *) # use default project and type of package
+            ;;
+    esac
+}
+
+parseArgs $@
+
+## download template
+# wget $download_base_url$download_file
+mkdir $project_name && cd $project_name
+git init
+git submodule add $git_server plugins
+git submodule init
+#git clone $git_server plugins
+
+#if [ ! -f $download_file ]; then 
+#    echo 'Error: Download Failed!!!' 
+#    exit 0
+#fi
+
+## echo '$download_file is downloaded!'
+#tar -vzxf $download_file
+#rm -f $download_file
+#mv $download_filename ${project_name}
+cp ./plugins/example/* ./ 
+mv ./gitignore ./.gitignore
+echo 'temp file is deleted!'
+sed -i "s/name=\"ProjectName\"/name=\"${project_name}\"/" ./build.xml
+sed -i "s/module=\"ProjectName\"/module=\"${project_name}\"/" ./ivy.xml
+sed -i "s/artifactId>ProjectName/artifactId>${project_name}/" ./pom.xml
+mkdir -p ./src
+mkdir -p ./test/unit
+mkdir -p ./test/verify
+mkdir -p ./test/integration
+#echo ''
+echo The ${project_name} was created!
+
+

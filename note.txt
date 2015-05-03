@@ -1,0 +1,4 @@
+注意：您当前使用的"CI-Plugins"已有新的版本。
+      你可以手动下载更新，也可以在project.properties里
+      添加配置项“plugins.auto.update=ture”将更新模式设
+      置为自动模式。

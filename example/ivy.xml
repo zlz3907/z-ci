@@ -1,0 +1,27 @@
+<ivy-module version="2.0">
+  <info organisation="org.name" module="ProjectName" revision="1.0">
+    <ivyauthor name="Firstname Lastname" url="mailto:yourname@mailserver.com" />
+    <description>
+      Describes the current module. This tag is the only one which can contain
+      free text, including html. It is used to describe the module itself,
+      usually in a single short phrase(it is not meant to replace the module
+      description on the corresponding web site), and then gives all information
+      necessary to use the module, especially information about public
+      configurations, how and when to use them.
+    </description>
+  </info>
+  <publications>
+    <artifact name="${ivy.module}" />
+  </publications>
+
+  <dependencies defaultconf="*->default">
+    <dependency org="org.hamcrest" name="hamcrest-all" rev="1.3" />
+    <dependency org="junit" name="junit" rev="4.8.2" transitive="false" />
+
+    <!-- put your dependencies -->
+
+    <!-- globe exclude -->
+    <exclude org="*" ext="*" type="source" />
+    <exclude org="*" ext="*" type="javadoc" />
+  </dependencies>
+</ivy-module>

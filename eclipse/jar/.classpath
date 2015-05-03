@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" output="build/main" path="src"/>
+	<classpathentry kind="src" output="build/test" path="test/verify"/>
+	<classpathentry kind="src" output="build/test" path="test/integration"/>
+	<classpathentry kind="src" output="build/test" path="test/unit"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="con" path="org.apache.ivyde.eclipse.cpcontainer.IVYDE_CONTAINER/?project=Jcm-Project-Template&amp;ivyXmlPath=ivy.xml&amp;confs=*&amp;ivySettingsPath=%24%7Bworkspace_loc%3AJcm-Project-Template%2Fplugins%2Fivy%2Fsettings%2Fivysettings.xml%7D&amp;loadSettingsOnDemand=false&amp;propertyFiles="/>
+	<classpathentry kind="output" path="build/main"/>
+</classpath>

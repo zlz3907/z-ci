@@ -1,0 +1,6 @@
+ivy.settings.dir = ${basedir}/ivy/settings
+ivy.default.ivy.user.dir = ${env.HOME}/.ivy2
+cache.dir = ${ivy.default.ivy.user.dir}/cache
+cache.ivyPattern=[organisation]/[module]/[revision]/[type]s/ivy.[ext]
+cache.artifactPattern=[organisation]/[module]/[revision]/[type]s/[artifact].[ext]
+#resolve.shared.settings.file = ${ivy.default.settings.dir}/ivysettings-shared.xml
