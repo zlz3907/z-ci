@@ -1,4 +1,4 @@
-<project name="ProjectName" default="test" basedir=".">
+<project name="ProjectName" default="ci.test" basedir=".">
   <description>
     project description
   </description>
