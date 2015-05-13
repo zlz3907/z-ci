@@ -1,10 +1,10 @@
 <ivysettings>
-  <property name="ivy.shared.default.root"             
-            value="/home/kfs/repository/shared" override="true"/>
-  <property name="ivy.shared.default.ivy.pattern"      
+  <property name="ivy.shared.default.root"
+            value="${env.HOME}/repos" override="true"/>
+  <property name="ivy.shared.default.ivy.pattern"
             value="[organisation]/[module]/[revision]/[type]s/[artifact].[ext]"
             override="false"/>
-  <property name="ivy.shared.default.artifact.pattern" 
+  <property name="ivy.shared.default.artifact.pattern"
             value="[organisation]/[module]/[revision]/[type]s/[artifact].[ext]"
             override="false"/>
   <resolvers>
@@ -13,10 +13,15 @@
         <ivy pattern="${ivy.shared.default.root}/${ivy.shared.default.ivy.pattern}" />
         <artifact pattern="${ivy.shared.default.root}/${ivy.shared.default.artifact.pattern}" />
         </filesystem>
+
+        <ssh name="shared" user="kfs" host="192.168.7.242" userPassword="kfs123">
+          <ivy pattern="${ivy.shared.default.root}/${ivy.shared.default.ivy.pattern}" />
+          <artifact pattern="${ivy.shared.default.root}/${ivy.shared.default.artifact.pattern}" />
+        </ssh>
     -->
-    <ssh name="shared" user="kfs" host="192.168.7.242" userPassword="kfs123">
+    <ssh host="source.3zso.com">
       <ivy pattern="${ivy.shared.default.root}/${ivy.shared.default.ivy.pattern}" />
       <artifact pattern="${ivy.shared.default.root}/${ivy.shared.default.artifact.pattern}" />
-    </ssh> 
+    </ssh>
   </resolvers>
 </ivysettings>

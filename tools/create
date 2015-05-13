@@ -8,7 +8,7 @@ download_file_ext='tar.gz'
 download_prefix_v=''
 download_file_ver=''
 download_base_url='http://192.168.7.244:8080/job/Jcm-Project-Template/lastSuccessfulBuild/artifact/dist/'
-git_server="https://github.com/zlz3907/z-ciplugins.git"
+git_server="https://github.com/zlz3907/z-ci.git"
 download_file=$download_filename$download_prefix_v$download_file_ver.$download_file_ext
 ## check input args
 parseArgs() {

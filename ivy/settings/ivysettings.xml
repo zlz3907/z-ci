@@ -17,7 +17,7 @@
    under the License.    
 -->
 <ivysettings>
-  <properties file="${ivy.settings.dir}/ivy.perporties" />
+  <properties file="${ivy.settings.dir}/ivy.properties" />
   <caches ivyPattern="${cache.ivyPattern}"
           artifactPattern="${cache.artifactPattern}"
           useOrigin="true">
