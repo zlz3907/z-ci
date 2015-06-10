@@ -2,11 +2,16 @@
 path=`pwd`
 project_name=${PWD##*/}
 echo $project_name
+replace=JavaProject
 
 if [ "-jar" = $0 ]; then
-    cp -rf ./plugins/example/jar/* ./
+    cp -rf $path/plugins/eclipse/jar/* ./
 else
-    cp -rf ./plugins/example/war/* ./
+    cp -rf $path/plugins/eclipse/war/. ./
+    replace="DynamicWebproject"
 fi
+
+find .settings/ -type f |xargs sed -i "s/${replace}/${project_name}/"
+sed -i "s/${replace}/${project_name}/" .project
 #export CLASSPATH=${path}/plugins/ant2ide.jar
 #ant -listener net.gleamynode.ant2ide.EclipseProjectGenerator "$@"
