@@ -1,5 +1,5 @@
 <ivy-module version="2.0">
-  <info organisation="org.name" module="ProjectName" revision="1.0">
+  <info organisation="com.enjoylearning" module="ProjectName" revision="1.0">
     <ivyauthor name="Firstname Lastname" url="mailto:yourname@mailserver.com" />
     <description>
       Describes the current module. This tag is the only one which can contain

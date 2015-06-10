@@ -444,4 +444,18 @@
     </copy>
   </target>
 
+  <!-- <target name="common.eclipse-web"> -->
+  <!--   <copy includeemptydirs="true" todir="${basedir}"> -->
+  <!--     <fileset dir="${basedir}/plugins/eclipse/war/"> -->
+  <!--     </fileset> -->
+  <!--   </copy> -->
+  <!-- </target> -->
+
+  <!-- <target name="common.eclipse-jar"> -->
+  <!--   <copy includeemptydirs="true" todir="${basedir}"> -->
+  <!--     <fileset dir="${basedir}/plugins/eclipse/jar/"> -->
+  <!--     </fileset> -->
+  <!--   </copy> -->
+  <!-- </target> -->
+
 </project>
