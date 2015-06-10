@@ -8,9 +8,9 @@ if [ "-jar" = $0 ]; then
     cp -rf $path/plugins/eclipse/jar/* ./
 else
     cp -rf $path/plugins/eclipse/war/. ./
-    replace="DynamicWebproject"
+    replace="DynamicWebProject"
 fi
-
+echo "s/${replace}/${project_name}/"
 find .settings/ -type f |xargs sed -i "s/${replace}/${project_name}/"
 sed -i "s/${replace}/${project_name}/" .project
 #export CLASSPATH=${path}/plugins/ant2ide.jar
