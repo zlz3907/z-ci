@@ -277,14 +277,18 @@
     <!-- Delete the ${build} and ${dist} directory trees -->
     <delete dir="${build.dir}" />
   </target>
+  <target name="common.cleanlib" description="clean up">
+    <!-- Delete the ${build} and ${dist} directory trees -->
+    <delete dir="${lib.dir}" />
+  </target>
   <!-- target: distclean
        删除已发布的项目jar包
   -->
   <target name="common.distclean" description="clean dist">
     <delete dir="${dist.dir}" />
   </target>
-  <target name="common.cleanall" depends="common.buildclean,common.distclean"
-          description="clean all">
+  <target name="common.cleanall" description="clean all"
+          depends="common.buildclean,common.distclean,common.cleanlib">
     <antcall target="_cobertura_clean" />
   </target>
   <target name="_cobertura_clean" if="isRunCoverage">
