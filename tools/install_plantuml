@@ -1,0 +1,31 @@
+#!/bin/bash
+help='install_plantuml [-t <target_dir>]'
+
+download_file=http://jaist.dl.sourceforge.net/project/plantuml/plantuml.jar
+target_dir=./
+## check input args
+parseArgs() {
+    while [ 0 -ne $# ]; do
+        case $1 in
+            -t) # source host
+                if [ 1 -lt $# ]; then
+                    shift
+                    target_dir=$1
+                fi;;
+            *) ;;
+        esac
+        shift
+    done
+}
+
+parseArgs $@
+
+if [ -f $target_dir/plantuml.jar ]; then
+    echo "The plantuml was installed!"
+    exit 0
+fi
+
+mkdir -p $target_dir && cd $target_dir
+wget $download_file
+
+echo "The plantuml was successfully installed!"

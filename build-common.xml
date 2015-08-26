@@ -303,7 +303,7 @@
   <!-- target: test
        运行junit测试类
   -->
-  <target name="common.unit-test">
+  <target name="common.unit-test" description="Invoke unit test">
     <antcall target="common.coverage">
       <param name="test.fileset" value="${test.unit.dir}" />
       <param name="test.classpath" value="classpath" />
@@ -314,14 +314,14 @@
     </antcall>
   </target>
 
-  <target name="common.verify-test">
+  <target name="common.verify-test" description="Invoke verify test">
     <antcall target="_run-test">
       <param name="test.fileset" value="${test.verify.dir}" />
       <param name="test.classpath" value="classpath" />
     </antcall>
   </target>
 
-  <target name="common.integration-test">
+  <target name="common.integration-test" description="Invoke integration test">
     <antcall target="_run-test">
       <param name="test.fileset" value="${test.integration.dir}" />
       <param name="test.classpath" value="classpath" />
