@@ -47,12 +47,12 @@
   </condition>
 
   <!--
-  <condition property="isPluginsOfReachable">
-    <and>
+      <condition property="isPluginsOfReachable">
+      <and>
       <istrue value="${plugins.auto.update}" />
       <isreachable timeout="2" url="${plugins.checksum.url}" />
-    </and>
-  </condition>
+      </and>
+      </condition>
   -->
 
   <!-- paths used for compilation and run
@@ -461,5 +461,32 @@
   <!--     </fileset> -->
   <!--   </copy> -->
   <!-- </target> -->
+
+  <path id="classpathuml">
+    <!--path refid="junit-path" /-->
+    <path refid="classpath" />
+    <fileset dir="$env.HOME/gnu/plugins/plantuml/" includes="*.jar" />
+    <fileset dir="/usr/share/java" includes="*tools.jar" />
+  </path>
+
+  <target name="common.uml"
+          description="generate plantuml file and uml diagram">
+    <javadoc doclet="de.mallox.doclet.PlantUMLDoclet"
+             docletpath="$env.HOME/gnu/plugins/plantuml/plantUmlDoclet.jar"
+             access="private"
+             source="1.7"
+             additionalparam=
+             "-J-DdestinationFile=uml.txt -J-DcreatePackages=false -J-DshowPublicMethods=true -J-DshowPublicConstructors=false -J-DshowPublicFields=true"
+             >
+      <packageset dir="src">
+        <include name="**"/>
+      </packageset>
+      <classpath refid="classpathuml" />
+    </javadoc>
+
+    <java jar="$env.HOME/gnu/plugins/plantuml/plantuml.jar" fork="true" maxmemory="128m">
+      <arg value="uml.txt"/>
+    </java>
+  </target>
 
 </project>
