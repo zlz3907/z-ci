@@ -465,14 +465,14 @@
   <path id="classpathuml">
     <!--path refid="junit-path" /-->
     <path refid="classpath" />
-    <fileset dir="$env.HOME/gnu/plugins/plantuml/" includes="*.jar" />
+    <fileset dir="${env.HOME}/gnu/plugins/plantuml/" includes="*.jar" />
     <fileset dir="/usr/share/java" includes="*tools.jar" />
   </path>
 
   <target name="common.uml"
           description="generate plantuml file and uml diagram">
     <javadoc doclet="de.mallox.doclet.PlantUMLDoclet"
-             docletpath="$env.HOME/gnu/plugins/plantuml/plantUmlDoclet.jar"
+             docletpath="${env.HOME}/gnu/plugins/plantuml/plantUmlDoclet.jar"
              access="private"
              source="1.7"
              additionalparam=
@@ -484,7 +484,7 @@
       <classpath refid="classpathuml" />
     </javadoc>
 
-    <java jar="$env.HOME/gnu/plugins/plantuml/plantuml.jar" fork="true" maxmemory="128m">
+    <java jar="${env.HOME}/gnu/plugins/plantuml/plantuml.jar" fork="true" maxmemory="128m">
       <arg value="uml.txt"/>
     </java>
   </target>
