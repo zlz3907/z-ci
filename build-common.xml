@@ -69,10 +69,10 @@
 
   <path id="classpath">
     <!--path refid="junit-path" /-->
-    <path refid="lib" />
     <pathelement location="${build.src.dir}" />
     <pathelement location="${build.test.dir}" />
     <pathelement path="${env.CLASSPATH}" />
+    <path refid="lib" />
   </path>
 
   <!-- ivy settings -->
