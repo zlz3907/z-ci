@@ -73,6 +73,7 @@
     <pathelement location="${build.test.dir}" />
     <pathelement path="${env.CLASSPATH}" />
     <path refid="lib" />
+    <fileset dir="${tomcat.home}/lib" includes="*.jar" />
   </path>
 
   <!-- ivy settings -->
