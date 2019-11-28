@@ -97,7 +97,7 @@
 
   <target name="common.generate-pom" description="Generate Maven pom">
     <ivy:makepom ivyfile="${basedir}/ivy.xml"
-                 pomfile="${basedir}/module.pom" conf="default,runtime">
+                 pomfile="${basedir}/pom.xml" conf="default,runtime">
       <mapping conf="default" scope="compile"/>
       <mapping conf="runtime" scope="runtime"/>
       <dependency group="com.acme" artifact="acme-logging"
@@ -245,11 +245,11 @@
     <antcall target="_packagewar" />
     <antcall target="_packageminiwar" />
   </target>
-  <target name="_packagejar">
+  <target name="_packagejar" depends="common.generate-pom" >
     <!-- Put everything in ${build} into the MyProject-${DSTAMP}.jar file -->
     <jar jarfile="${dist.lib}/${project.name}-${ivy.revision}-jars.jar"
          basedir="${build.src.dir}" />
-    <jar jarfile="${dist.lib}/${project.name}-${ivy.revision}-sources.jar"
+    <jar jarfile="${dist.lib}/${project.name}-${ivy.revision}-sources.zip"
          basedir="${src.dir}"/>
   </target>
   <target name="_packagewar" if="isWarType">
@@ -418,10 +418,18 @@
                  module="${project.name}"
                  revision="${ivy.revision}"
                  pubrevision="${ivy.revision}"
+                 publishivy="false"
                  overwrite="true">
-      <artifact name="${project.name}" type="jar" ext="jar"/>
-      <artifact name="${project.name}" type="source" ext="jar"/>
+      <!-- <artifact name="${project.name}" type="jar" ext="jar"/> -->
+      <!-- <artifact name="${project.name}" type="txt"/> -->
+      <artifact name="${project.name}" type="" ext="pom" />
+      <!-- <artifact name="${project.name}" type="ivy" ext="ivy" /> -->
+      <!-- <artifact name="${project.name}" type="n3" e:classifier="metadata"/> -->
+      <!-- <artifact name="${project.name}" type="source" ext="zip" /> -->
+      <!-- <artifact name="${project.name}" type="source" ext="jar"/> -->
       <artifacts pattern="${dist.lib}/[artifact]-[revision]-[type]s.[ext]"/>
+      <artifacts pattern="${basedir}/pom.xml" />
+      <!-- <artifacts pattern="${basedir}/ivy.xml" /> -->
     </ivy:publish>
   </target>
 
@@ -434,7 +442,7 @@
 
   <target name="common.deploy">
     <antcall target="common.publish">
-      <param name="resolver" value="shared" />
+      <param name="resolver" value="zhycit-snapshots" />
     </antcall>
     <copy includeemptydirs="true" todir="${dist.lib}">
       <fileset dir="${publish.dir}">
